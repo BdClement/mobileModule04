@@ -3,19 +3,33 @@ import { StyleSheet, Text, View } from 'react-native';
 import LoginPage from './screens/Login';
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { ResponsiveProvider } from './context/ResponsiveContext';
+import { createClient } from '@supabase/supabase-js';
+import * as AuthSession from 'expo-auth-session';
+
+
+const redirectUri = AuthSession.makeRedirectUri({
+  useProxy: true
+});
+// console.log('Test affichage redirect', redirectUri);
+// const supabaseUrl = process.env.SUPABASE_URL;
+// const supabaseApiKey = process.env.SUPABASE_API_KEY;
+
+// export const supabase = createClient(supabaseUrl, supabaseApiKey);
 
 export default function App() {
+
+
   return (
     // mettre les provider
     // Mettre un safeAreaView par screen et placer l'image de fond dans chaque screen
     <ResponsiveProvider>
-      <SafeAreaProvider>
-        <View style={styles.container}>
-          <StatusBar style="light" />
-          <LoginPage style={{flex: 1}}></LoginPage>
-          {/* <Text>Open up App.js to start working on your app!</Text> */}
-        </View>
-      </SafeAreaProvider>
+        <SafeAreaProvider>
+          <View style={styles.container}>
+            <StatusBar style="light" />
+            <LoginPage style={{flex: 1}}></LoginPage>
+            {/* <Text>Open up App.js to start working on your app!</Text> */}
+          </View>
+        </SafeAreaProvider>
     </ResponsiveProvider>
   );
 }
@@ -28,3 +42,15 @@ const styles = StyleSheet.create({
 
 // Pour le systeme d'authentification j'ai choisi Supabase car solution moderne compatbible avec RN / Expo Go
   // Cree un projet sur le dashboard Supabase
+
+
+// Mise en place de la solution :
+  // - Creer un contexte pour l'auth
+  // - Creer 2 Stacks (ou autre) pour gerer redirection a la page Login Si connecte => Profile
+        // Et une a lentree dans l'application Navigation etant connecte
+
+
+// A Faire :
+  // -Creer un compte expo
+  // -Se connecter a ce compte sur Expo Go (telephone)
+  // - Setup Github redirect vers https://auth.expo.io/@username/slug qui sert de proxy vers mon app en localhost

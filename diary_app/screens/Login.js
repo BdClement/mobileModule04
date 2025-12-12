@@ -20,14 +20,16 @@ export default function LoginPage() {
         fontSize: isLandscape? moderateScale(36) : moderateScale(30)
       },
       textLoginButton: {
-        color: 'black',
+        color: 'white',
         fontSize: isLandscape? moderateScale(16) : moderateScale(14)
       },
       loginButton: {
         padding: isLandscape? moderateScale(10) : moderateScale(20),
         paddingLeft: isLandscape? moderateScale(20) : moderateScale(30),
         paddingRight: isLandscape? moderateScale(20) : moderateScale(30),
-        backgroundColor: 'white',
+        // backgroundColor: 'white',
+        borderWidth:moderateScale(2),
+        borderColor: 'white',
         borderRadius: moderateScale(16),
         // fontSize: isLandscape? moderateScale(25) : moderateScale(20),
     },
@@ -35,7 +37,7 @@ export default function LoginPage() {
         // flex: 1,
         padding: moderateScale(20),
         margin: moderateScale(10),
-        gap: moderateScale(30),
+        gap: isLandscape ? moderateScale(25) : moderateScale(35),
         justifyContent: 'center',
         alignItems: 'center',
       }
@@ -63,6 +65,5 @@ export default function LoginPage() {
 }
 
 // Ameliorer Button
-// Changer fontFamily
 // Implementer authentification
 // Penser a la naviagtion double 
