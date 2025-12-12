@@ -3,18 +3,15 @@ import { StyleSheet, Text, View } from 'react-native';
 import LoginPage from './screens/Login';
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { ResponsiveProvider } from './context/ResponsiveContext';
-import { createClient } from '@supabase/supabase-js';
-import * as AuthSession from 'expo-auth-session';
+// import * as AuthSession from 'expo-auth-session';
+import Constants from 'expo-constants';
+import { SessionProvider } from './context/AuthContext';
 
 
-const redirectUri = AuthSession.makeRedirectUri({
-  useProxy: true
-});
+// const redirectUri = AuthSession.makeRedirectUri({
+//   useProxy: true
+// });
 // console.log('Test affichage redirect', redirectUri);
-// const supabaseUrl = process.env.SUPABASE_URL;
-// const supabaseApiKey = process.env.SUPABASE_API_KEY;
-
-// export const supabase = createClient(supabaseUrl, supabaseApiKey);
 
 export default function App() {
 
@@ -24,11 +21,13 @@ export default function App() {
     // Mettre un safeAreaView par screen et placer l'image de fond dans chaque screen
     <ResponsiveProvider>
         <SafeAreaProvider>
-          <View style={styles.container}>
-            <StatusBar style="light" />
-            <LoginPage style={{flex: 1}}></LoginPage>
-            {/* <Text>Open up App.js to start working on your app!</Text> */}
-          </View>
+          <SessionProvider>
+            <View style={styles.container}>
+              <StatusBar style="light" />
+              <LoginPage style={{flex: 1}}></LoginPage>
+              {/* <Text>Open up App.js to start working on your app!</Text> */}
+            </View>
+          </SessionProvider>
         </SafeAreaProvider>
     </ResponsiveProvider>
   );
@@ -51,6 +50,8 @@ const styles = StyleSheet.create({
 
 
 // A Faire :
-  // -Creer un compte expo
-  // -Se connecter a ce compte sur Expo Go (telephone)
+  // -Creer un compte expo DONE
+  // -Se connecter a ce compte sur Expo Go (telephone) DONE
   // - Setup Github redirect vers https://auth.expo.io/@username/slug qui sert de proxy vers mon app en localhost
+
+  // https://auth.expo.io/@BdClement/diary_app

@@ -2,6 +2,7 @@
   "expo": {
     "name": "diary_app",
     "slug": "diary_app",
+    "scheme": "diary",
     "version": "1.0.0",
     "orientation": "default",
     "icon": "./assets/icon.png",

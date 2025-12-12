@@ -2,6 +2,30 @@ import { StyleSheet , View, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Image } from 'expo-image'
 import { useResponsiveContext } from "../context/ResponsiveContext";
+import { supabase } from '../utils/supabaseClient';
+import * as AuthSession from 'expo-auth-session';
+
+const redirectUri = AuthSession.makeRedirectUri({
+  useProxy: true
+});
+console.log('Test affichage redirect', redirectUri);
+
+const handleLogin = async () => {
+  console.log('Logique a implementer');
+  // const { data, error } =
+  const resultLogin = await supabase.auth.signInWithOAuth({
+    provider: 'github',
+    options: { redirectTo: redirectUri }
+  });
+  console.log("Test login", resultLogin)
+  // On recoit l'url de redirection pour se connecter via le Provider
+  // On redirige vers celui ci
+  if (resultLogin.data?.url) {
+    console.log('Entree dans la redirection vers github')
+    await AuthSession.startAsync({authUrl : resultLogin.data.url});
+  }
+  console.log('Sortie')
+};
 
 export default function LoginPage() {
 
@@ -52,9 +76,7 @@ export default function LoginPage() {
             />
             <View style={styles.view}>
                 <Text style={styles.welcomeSentence}>Welcome to your Diary</Text>
-                <TouchableOpacity onPress={() => {
-                    console.log('Logique a implementer');
-                }}
+                <TouchableOpacity onPress={handleLogin}
                 style={styles.loginButton}
                 >
                     <Text style={styles.textLoginButton}>Login</Text>

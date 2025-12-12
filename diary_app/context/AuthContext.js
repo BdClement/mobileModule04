@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { supabase } from './supabaseClient';
+import { supabase } from '../utils/supabaseClient';
 
 const SessionContext = createContext();
 
@@ -14,7 +14,7 @@ export const SessionProvider = ({ children }) => {
     );
 
     return () => listener.subscription.unsubscribe();
-  }, []);
+  }, []);// Au montage
 
   return <SessionContext.Provider value={{session}}>
     {children}
