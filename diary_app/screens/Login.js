@@ -1,33 +1,90 @@
 import { StyleSheet , View, Text, TouchableOpacity } from "react-native";
+import React, { useEffect } from 'react';
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Image } from 'expo-image'
 import { useResponsiveContext } from "../context/ResponsiveContext";
 import { supabase } from '../utils/supabaseClient';
 import * as AuthSession from 'expo-auth-session';
+import * as Linking from 'expo-linking';
 
 const redirectUri = AuthSession.makeRedirectUri({
   useProxy: true
 });
+// const redirectUri = AuthSession.makeRedirectUri({
+//   scheme: "diary"
+// });
 console.log('Test affichage redirect', redirectUri);
 
 const handleLogin = async () => {
   console.log('Logique a implementer');
   // const { data, error } =
-  const resultLogin = await supabase.auth.signInWithOAuth({
+  const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'github',
     options: { redirectTo: redirectUri }
   });
-  console.log("Test login", resultLogin)
-  // On recoit l'url de redirection pour se connecter via le Provider
-  // On redirige vers celui ci
-  if (resultLogin.data?.url) {
-    console.log('Entree dans la redirection vers github')
-    await AuthSession.startAsync({authUrl : resultLogin.data.url});
+  if (error) {
+    console.log("Erreur de login Supabase : ", error);
+    return;
   }
-  console.log('Sortie')
+  if (!data?.url) {
+    console.log("Pas d'URL de login");
+    return;
+  }
+  console.log('No error, url OK : ', data.url);
+  Linking.openURL(data.url)
+
+  // A fairele catch de l'url pour recuperer la session
+  // MANIERE NATIVE AVEC DEV BUILD
+  // const result = await AuthSession.startAsync({authUrl : data.url});
+  // if (result?.type === 'success') {
+  //   console.log("Connexion reussie");
+  //   // Supabase gere le token et la session cote client
+  //   // supabase.auth.getSession est maintenant utilisable
+  //   const {data: sessionData} = await supabase.auth.getSession();
+  //   console.log("Session : ", sessionData);  
+  // } else {
+  //   console.log("Connexion error : ", result)
+  // }
+
+  console.log('Sortie : ', result);
 };
 
 export default function LoginPage() {
+
+    useEffect(() => {
+    const handleDeepLink = async (event) => {
+      const url = event.url;
+      console.log("🔁 Redirect reçu :", url);
+  
+      // IMPORTANT : dire à Supabase de traiter l’URL
+      const { data, error } = await supabase.auth.getSessionFromUrl({ url });
+  
+      if (error) {
+        console.log("❌ Erreur session :", error);
+        return;
+      }
+  
+      console.log("✅ Session récupérée :", data.session);
+    };
+    // App ouverte via url
+    const subscription = Linking.addEventListener('url', handleDeepLink);
+  
+    return () => {
+      subscription.remove();// Nettoyage 
+    };
+  }, []);
+  
+  // Ecoute des changement d'auth
+  // useEffect(() => {
+  //   const { data: listener } = supabase.auth.onAuthStateChange(
+  //     (event, session) => {
+  //       console.log("🔐 Auth event :", event);
+  //       console.log("Session :", session);
+  //     }
+  //   );
+  
+  //   return () => listener.subscription.unsubscribe();
+  // }, []);
 
     const { height, width, moderateScale } = useResponsiveContext();
     const isLandscape = width > height
@@ -86,6 +143,9 @@ export default function LoginPage() {
     )
 }
 
-// Ameliorer Button
-// Implementer authentification
-// Penser a la naviagtion double 
+// A la fin faire un dev build pour utiliser le comportement natif (redirection OAuth etc)
+
+// Terminer Github redirection avec Linking 
+// Faire Google redirection
+// Faire page intermediraire pour laisser le chox entre Google ou Github
+// 

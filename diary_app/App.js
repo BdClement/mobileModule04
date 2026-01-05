@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
 
 
 // A Faire :
-  // -Creer un compte expo DONE
+  // -CreerD un compte expo ONE
   // -Se connecter a ce compte sur Expo Go (telephone) DONE
   // - Setup Github redirect vers https://auth.expo.io/@username/slug qui sert de proxy vers mon app en localhost
 
