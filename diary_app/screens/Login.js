@@ -32,7 +32,7 @@ const handleLogin = async () => {
     return;
   }
   console.log('No error, url OK : ', data.url);
-  Linking.openURL(data.url)
+  Linking.openURL(data.url);
 
   // A fairele catch de l'url pour recuperer la session
   // MANIERE NATIVE AVEC DEV BUILD
@@ -47,7 +47,8 @@ const handleLogin = async () => {
     // console.log("Connexion error : ", result);
   // }
 
-  console.log('Sortie : ', result);
+  // console.log('Sortie : ', result);
+  console.log("Sortie de handleLogin");
 };
 
 export default function LoginPage() {

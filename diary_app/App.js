@@ -3,15 +3,11 @@ import { StyleSheet, Text, View } from 'react-native';
 import LoginPage from './screens/Login';
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { ResponsiveProvider } from './context/ResponsiveContext';
-// import * as AuthSession from 'expo-auth-session';
-import Constants from 'expo-constants';
 import { SessionProvider } from './context/AuthContext';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 
-// const redirectUri = AuthSession.makeRedirectUri({
-//   useProxy: true
-// });
-// console.log('Test affichage redirect', redirectUri);
 
 export default function App() {
 
@@ -22,11 +18,17 @@ export default function App() {
     <ResponsiveProvider>
         <SafeAreaProvider>
           <SessionProvider>
-            <View style={styles.container}>
-              <StatusBar style="light" />
-              <LoginPage style={{flex: 1}}></LoginPage>
-              {/* <Text>Open up App.js to start working on your app!</Text> */}
-            </View>
+            <NavigationContainer>
+              <View style={styles.container}>
+                <StatusBar style="light" />
+                {/* <LoginPage style={{flex: 1}}></LoginPage> */}
+                <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
+                  <Stack.Screen name="Login" component={LoginPage} />
+                  {/* <Stack.Screen name="Choice" component={ChoicePage} />
+                  <Stack.Screen name="Home" component={HomePage} /> */}
+                </Stack.Navigator>
+              </View>
+            </NavigationContainer>
           </SessionProvider>
         </SafeAreaProvider>
     </ResponsiveProvider>
@@ -47,11 +49,5 @@ const styles = StyleSheet.create({
   // - Creer un contexte pour l'auth
   // - Creer 2 Stacks (ou autre) pour gerer redirection a la page Login Si connecte => Profile
         // Et une a lentree dans l'application Navigation etant connecte
-
-
-// A Faire :
-  // -CreerD un compte expo ONE
-  // -Se connecter a ce compte sur Expo Go (telephone) DONE
-  // - Setup Github redirect vers https://auth.expo.io/@username/slug qui sert de proxy vers mon app en localhost
 
   // https://auth.expo.io/@BdClement/diary_app
