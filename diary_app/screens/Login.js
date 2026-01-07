@@ -11,7 +11,8 @@ import * as Linking from 'expo-linking';
 //   useProxy: true
 // });
 const redirectUri = AuthSession.makeRedirectUri({
-  scheme: "diary"
+  // scheme: "diary",
+  useProxy: true
 });
 console.log('Test affichage redirect', redirectUri);
 
@@ -37,13 +38,13 @@ const handleLogin = async () => {
   // MANIERE NATIVE AVEC DEV BUILD
   // const result = await AuthSession.startAsync({authUrl : data.url});
   // if (result?.type === 'success') {
-  //   console.log("Connexion reussie");
-  //   // Supabase gere le token et la session cote client
-  //   // supabase.auth.getSession est maintenant utilisable
-  //   const {data: sessionData} = await supabase.auth.getSession();
-  //   console.log("Session : ", sessionData);  
+    // console.log("Connexion reussie");
+    // Supabase gere le token et la session cote client
+    // supabase.auth.getSession est maintenant utilisable
+    // const {data: sessionData} = await supabase.auth.getSession();
+    // console.log("Session : ", sessionData);  
   // } else {
-  //   console.log("Connexion error : ", result)
+    // console.log("Connexion error : ", result);
   // }
 
   console.log('Sortie : ', result);
