@@ -1,34 +1,21 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import LoginPage from './screens/Login';
+import { StyleSheet, View } from 'react-native';
 import { SafeAreaProvider } from "react-native-safe-area-context"
 import { ResponsiveProvider } from './context/ResponsiveContext';
 import { SessionProvider } from './context/AuthContext';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
-
+import AppContent from './screens/AppContent';
 
 export default function App() {
 
 
   return (
-    // mettre les provider
-    // Mettre un safeAreaView par screen et placer l'image de fond dans chaque screen
     <ResponsiveProvider>
         <SafeAreaProvider>
           <SessionProvider>
-            <NavigationContainer>
               <View style={styles.container}>
                 <StatusBar style="light" />
-                {/* <LoginPage style={{flex: 1}}></LoginPage> */}
-                <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
-                  <Stack.Screen name="Login" component={LoginPage} />
-                  {/* <Stack.Screen name="Choice" component={ChoicePage} />
-                  <Stack.Screen name="Home" component={HomePage} /> */}
-                </Stack.Navigator>
+                <AppContent/>
               </View>
-            </NavigationContainer>
           </SessionProvider>
         </SafeAreaProvider>
     </ResponsiveProvider>

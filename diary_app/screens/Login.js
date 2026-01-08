@@ -1,26 +1,24 @@
 import { StyleSheet , View, Text, TouchableOpacity, Platform } from "react-native";
-import React, { useEffect } from 'react';
+import { useState } from 'react';
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Image } from 'expo-image'
 import { useResponsiveContext } from "../context/ResponsiveContext";
 import { supabase } from '../utils/supabaseClient';
 import * as AuthSession from 'expo-auth-session';
 import * as Linking from 'expo-linking';
+import AntDesign from '@expo/vector-icons/AntDesign';
+import { useSupabaseSession } from "../context/AuthContext";
 
-// const redirectUri = AuthSession.makeRedirectUri({
-//   useProxy: true
-// });
 const redirectUri = AuthSession.makeRedirectUri({
   // scheme: "diary",
   useProxy: true
 });
 console.log('Test affichage redirect', redirectUri);
 
-const handleLogin = async () => {
-  console.log('Logique a implementer');
-  // const { data, error } =
+const handleLogin = async (provider) => {
+  console.log('Appel a handleLogin with provider : ', provider);
   const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: 'github',
+    provider: provider,
     options: { redirectTo: redirectUri }
   });
   if (error) {
@@ -33,8 +31,6 @@ const handleLogin = async () => {
   }
   console.log('No error, url OK : ', data.url);
   Linking.openURL(data.url);
-
-  // A fairele catch de l'url pour recuperer la session
   // MANIERE NATIVE AVEC DEV BUILD
   // const result = await AuthSession.startAsync({authUrl : data.url});
   // if (result?.type === 'success') {
@@ -46,127 +42,94 @@ const handleLogin = async () => {
   // } else {
     // console.log("Connexion error : ", result);
   // }
-
-  // console.log('Sortie : ', result);
   console.log("Sortie de handleLogin");
 };
 
 export default function LoginPage() {
+  const [showProviders, setShowProviders] = useState(false);
   console.log("Entree dans LoginPage");
-  useEffect(() => {
-    if (Platform.OS === 'web') {
-      console.log("Entree dans WEB useEffect");
-      // Web donc l'url est dans window.location
-      const getWebSession = async () => {
-        console.log("Entree dans getWebSession");
-        const { data: { session }, error } = await supabase.auth.getSession();
-        // Est ce que error sera levee en cas de non session ?
-        if (error) console.log("Erreur session web : ", error);
-        else console.log("Session web recuperee : ", session);
-      };
-      getWebSession();
-    }
-    else {
-      console.log("Entree dans mobile useEffect");
-      const handleDeepLink = async (event) => {
-        const url = event.url;
-        console.log("🔁 Redirect reçu :", url);
-      
-        // IMPORTANT : dire à Supabase de traiter l’URL
-        const { data, error } = await supabase.auth.getSessionFromUrl({ url });
-      
-        if (error) {
-          console.log("❌ Erreur session :", error);
-          return;
-        }
-      
-        console.log("✅ Session récupérée :", data.session);
-      };
-      // App ouverte via url
-      const subscription = Linking.addEventListener('url', handleDeepLink);
-    
-      return () => {
-        subscription.remove();// Nettoyage 
-      };
-    }
-  }, []);
-  
-  // Ecoute des changement d'auth
-  // useEffect(() => {
-  //   const { data: listener } = supabase.auth.onAuthStateChange(
-  //     (event, session) => {
-  //       console.log("🔐 Auth event :", event);
-  //       console.log("Session :", session);
-  //     }
-  //   );
-  
-  //   return () => listener.subscription.unsubscribe();
-  // }, []);
+  const { height, width, moderateScale } = useResponsiveContext();
+  const isLandscape = width > height
 
-    const { height, width, moderateScale } = useResponsiveContext();
-    const isLandscape = width > height
+  const { session } = useSupabaseSession();
+  console.log("Session dans Login = ", session);
 
-    const styles = StyleSheet.create({
-      container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        // backgroundColor: 'transparent',
-      },
-      welcomeSentence: {
-        color: 'white',
-        fontSize: isLandscape? moderateScale(36) : moderateScale(30)
-      },
-      textLoginButton: {
-        color: 'white',
-        fontSize: isLandscape? moderateScale(16) : moderateScale(14)
-      },
-      loginButton: {
-        padding: isLandscape? moderateScale(10) : moderateScale(20),
-        paddingLeft: isLandscape? moderateScale(20) : moderateScale(30),
-        paddingRight: isLandscape? moderateScale(20) : moderateScale(30),
-        // backgroundColor: 'white',
-        borderWidth:moderateScale(2),
-        borderColor: 'white',
-        borderRadius: moderateScale(16),
-        // fontSize: isLandscape? moderateScale(25) : moderateScale(20),
+  const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
     },
-      view: {
-        // flex: 1,
-        padding: moderateScale(20),
-        margin: moderateScale(10),
-        gap: isLandscape ? moderateScale(25) : moderateScale(35),
-        justifyContent: 'center',
-        alignItems: 'center',
-      }
-    });
+    welcomeSentence: {
+      color: 'white',
+      fontSize: isLandscape? moderateScale(36) : moderateScale(30)
+    },
+    textLoginButton: {
+      color: 'white',
+      fontSize: isLandscape? moderateScale(16) : moderateScale(14)
+    },
+    loginButton: {
+      padding: isLandscape? moderateScale(10) : moderateScale(20),
+      paddingLeft: isLandscape? moderateScale(20) : moderateScale(30),
+      paddingRight: isLandscape? moderateScale(20) : moderateScale(30),
+      borderWidth:moderateScale(2),
+      borderColor: 'white',
+  },
+    providerButton: {
+      padding: isLandscape? moderateScale(5) : moderateScale(10),
+      paddingLeft: isLandscape? moderateScale(10) : moderateScale(20),
+      paddingRight: isLandscape? moderateScale(10) : moderateScale(20),
+      backgroundColor: 'grey',
+      alignItems: 'center',
+      gap: 6
+  },
+    view: {
+      padding: moderateScale(20),
+      margin: moderateScale(10),
+      gap: isLandscape ? moderateScale(25) : moderateScale(35),
+      justifyContent: 'center',
+      alignItems: 'center',
+    }
+  });
 
-    return (
-        <SafeAreaView style={styles.container}>
-            <Image
-                source={require('../assets/Feuilles.webp')}
-                contentFit="cover"
-                style={StyleSheet.absoluteFillObject}
-            />
+  return (
+      <SafeAreaView style={styles.container}>
+          <Image
+              source={require('../assets/Feuilles.webp')}
+              contentFit="cover"
+              style={StyleSheet.absoluteFillObject}
+          />
+          {showProviders ? (
             <View style={styles.view}>
-                <Text style={styles.welcomeSentence}>Welcome to your Diary</Text>
-                <TouchableOpacity onPress={handleLogin}
-                style={styles.loginButton}
-                >
-                    <Text style={styles.textLoginButton}>Login</Text>
-                </TouchableOpacity>
+              <TouchableOpacity onPress={() => handleLogin('github')}
+              style={styles.providerButton}
+              >
+                <Text style={styles.textLoginButton}>Login with Github
+                </Text>
+                <AntDesign name="github" size={isLandscape? moderateScale(16) : moderateScale(14)} color="white" />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => handleLogin('google')}
+              style={styles.providerButton}
+              >
+                <Text style={styles.textLoginButton}>Login with Google</Text>
+                <AntDesign name="google" size={isLandscape? moderateScale(16) : moderateScale(14)} color="white" />
+              </TouchableOpacity>
             </View>
-        </SafeAreaView>
-    )
-}
+          ) : (
+          <View style={styles.view}>
+              <Text style={styles.welcomeSentence}>Welcome to your Diary</Text>
+              <TouchableOpacity onPress={() => setShowProviders(true)}
+              style={styles.loginButton}
+              >
+                  <Text style={styles.textLoginButton}>Login</Text>
+              </TouchableOpacity>
+          </View>
+          )}
+      </SafeAreaView>
+  )
+};
 
-// A la fin faire un dev build pour utiliser le comportement natif (redirection OAuth etc)
-
-// Terminer Github redirection avec Linking 
-// Faire Google redirection
-// Faire page intermediraire pour laisser le chox entre Google ou Github
-
-// Tester via Mac ?
+// Faire Google redirection dans HandleLogin + config google
 
 
 // Fail => sdkmanager narrive pas a contacter les repo google (pb reseaus)
