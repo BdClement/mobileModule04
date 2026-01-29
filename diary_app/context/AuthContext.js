@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, useMemo } from 'react';
-import { Platform } from 'react-native';
+import { AppState, Linking, Platform } from 'react-native';
 import { supabase } from '../utils/supabaseClient';
 
 const SessionContext = createContext();
@@ -7,48 +7,83 @@ const SessionContext = createContext();
 export const SessionProvider = ({ children }) => {
   const [session, setSession] = useState(null);
 
+  console.log("SessionProvider rendu !");
+
   useEffect(() => {
+    console.log("useEffect monté !");
     const initSession = async () => {
-      if (Platform.OS === 'web') {
-        console.log("Entree dans WEB useEffect");
-        const { data: { session }, error } = await supabase.auth.getSession();
-        if (error) console.log("Erreur session web :", error);
-        else setSession(session);
-      } else {
-        console.log("Entree dans mobile useEffect");
-        const handleDeepLink = async (event) => {
-          const url = event.url;
-          console.log("Redirect URL reçu :", url);
-          const { data: { session }, error } = await supabase.auth.getSessionFromUrl({ url });
-          if (error) {
-            console.log("Erreur session mobile :", error);
-            return;
-          }
-          else setSession(session);
-        
-          console.log("Session récupérée :", data.session);
-        };
-        // App ouverte via url
-        const subscription = Linking.addEventListener('url', handleDeepLink);
-      
-        return () => {
-          subscription.remove();// Nettoyage 
-        }
-      }
+    console.log("initSession called !");
+    const { data: { session }, error } = await supabase.auth.getSession();
+    if (error) console.log("Erreur getting session :", error);
+    else {
+      console.log("Session récupéréee : ", session);
+      setSession(session);
     };
-    initSession();
+  };
 
-    const { data: listener } = supabase.auth.onAuthStateChange(
-      (_event, session) => setSession(session)
-    );
+  initSession();
+  // Test
+// 
+  // Listener sur les changement de sessions
+  const { data: authListener } = supabase.auth.onAuthStateChange(
+    (_event, session) => {
+      console.log("Auth state changed : ", _event);//session
+      setSession(session);
+    }
+  );
+  
 
-    return () => listener.subscription.unsubscribe();
+  let deepLinkListener;
+
+  console.log("Config listener mobile");
+  const extractTokensFromUrl = (url) => {
+  try {
+    const fragment = url.split('#')[1];
+    if (!fragment) return null;
+    const params = new URLSearchParams(fragment);
+    return {
+      access_token: params.get('access_token'),
+      refresh_token: params.get('refresh_token'),
+    };
+  } catch (err) {
+    console.error("Erreur parsing URL:", err);
+    return null;
+  }};
+
+  const handleDeepLink = async (event) => {
+    const url = event.url;
+    console.log("URL de redirection reçu :", url);
+    try {
+      const tokens = extractTokensFromUrl(url);
+      if (!tokens || !tokens.access_token) {
+        console.log("Pas de tokens dans l'URL");
+        return;
+      }
+      const { error } = await supabase.auth.setSession(tokens);
+      if (error) {
+        console.log("Erreur setSession : ", error);
+      } else {
+        console.log("Session set");
+      }
+    } catch (err) {
+      console.error("Erreur ou timeout handleDeepLink:", err);
+    }
+  };
+  deepLinkListener = Linking.addEventListener('url', handleDeepLink);
+    
+    return () => {
+      authListener.subscription.unsubscribe();
+      deepLinkListener?.remove();
+    }
   }, []);// Au montage
 
-  // const value = useMemo(() => ({ session }), [session]);
   return <SessionContext.Provider value={{session}}>
     {children}
   </SessionContext.Provider>;
 }
 
 export const useSupabaseSession = () => useContext(SessionContext);
+
+// Comprendre pourquoi au split en 2 useEffect j'ai 2 comportement different
+// Ajouter commentaire par rapport a env.js qu'il faut retirer de gitignore pour que le build dev le trouve
+// Ameliorer fichier.txt

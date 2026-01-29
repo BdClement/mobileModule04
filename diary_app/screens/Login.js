@@ -10,8 +10,8 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import { useSupabaseSession } from "../context/AuthContext";
 
 const redirectUri = AuthSession.makeRedirectUri({
-  // scheme: "diary",
-  useProxy: true
+  scheme: "diary",
+  useProxy: false
 });
 console.log('Test affichage redirect', redirectUri);
 
@@ -30,17 +30,17 @@ const handleLogin = async (provider) => {
     return;
   }
   console.log('No error, url OK : ', data.url);
-  Linking.openURL(data.url);
+  await Linking.openURL(data.url);
   // MANIERE NATIVE AVEC DEV BUILD
   // const result = await AuthSession.startAsync({authUrl : data.url});
   // if (result?.type === 'success') {
-    // console.log("Connexion reussie");
-    // Supabase gere le token et la session cote client
-    // supabase.auth.getSession est maintenant utilisable
-    // const {data: sessionData} = await supabase.auth.getSession();
-    // console.log("Session : ", sessionData);  
+  //   console.log("Connexion reussie");
+  //   // Supabase gere le token et la session cote client
+  //   // supabase.auth.getSession() //est maintenant utilisable
+  //   const {data: sessionData} = await supabase.auth.getSession();
+  //   console.log("Session : ", sessionData);  
   // } else {
-    // console.log("Connexion error : ", result);
+  //   console.log("Connexion error : ", result);
   // }
   console.log("Sortie de handleLogin");
 };
