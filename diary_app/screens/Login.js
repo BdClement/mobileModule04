@@ -128,13 +128,3 @@ export default function LoginPage() {
       </SafeAreaView>
   )
 };
-
-// Faire Google redirection dans HandleLogin + config google
-
-
-// Fail => sdkmanager narrive pas a contacter les repo google (pb reseaus)
-// Emulateur android Sans installer directement Android Studio
-    // Telecharger l'outils de ligne de commande android sutdio
-    // Installer le SDK minimal et l'emulateur :
-        // Aller dans cmdline-tools/bin
-        // Executer "./sdkmanager --sdk_root=$HOME/Android/Sdk "platform-tools" "platforms;android-33" "system-images;android-33;google_apis;x86_64" "emulator"

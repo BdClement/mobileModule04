@@ -28,13 +28,7 @@ const styles = StyleSheet.create({
   },
 });
 
-// Pour le systeme d'authentification j'ai choisi Supabase car solution moderne compatbible avec RN / Expo Go
-  // Cree un projet sur le dashboard Supabase
-
-
-// Mise en place de la solution :
-  // - Creer un contexte pour l'auth
-  // - Creer 2 Stacks (ou autre) pour gerer redirection a la page Login Si connecte => Profile
-        // Et une a lentree dans l'application Navigation etant connecte
-
-  // https://auth.expo.io/@BdClement/diary_app
+//  A faire :
+  // Creation de database sur Supabase et utilisation de cette DB sur mon Home
+  // Amelioration de ma page Home
+  // bouton back sur la page provider
