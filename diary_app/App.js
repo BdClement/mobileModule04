@@ -31,4 +31,4 @@ const styles = StyleSheet.create({
 //  A faire :
   // Creation de database sur Supabase et utilisation de cette DB sur mon Home
   // Amelioration de ma page Home
-  // bouton back sur la page provider
+  // tester en mode web + autre pour avoir les responsivites

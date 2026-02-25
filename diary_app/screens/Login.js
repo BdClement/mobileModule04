@@ -57,8 +57,18 @@ export default function LoginPage() {
   const styles = StyleSheet.create({
     container: {
       flex: 1,
+    },
+    viewMainContent: {
+      paddingBottom: isLandscape ? moderateScale(20) : moderateScale(50),
+      flex: 1,
+      gap: isLandscape ? moderateScale(25) : moderateScale(35),
       justifyContent: 'center',
       alignItems: 'center',
+    },
+    viewHeader: {
+      padding: moderateScale(10),
+      gap: isLandscape ? moderateScale(25) : moderateScale(35),
+      alignItems: 'flex-end',
     },
     welcomeSentence: {
       color: 'white',
@@ -70,26 +80,25 @@ export default function LoginPage() {
     },
     loginButton: {
       padding: isLandscape? moderateScale(10) : moderateScale(20),
-      paddingLeft: isLandscape? moderateScale(20) : moderateScale(30),
-      paddingRight: isLandscape? moderateScale(20) : moderateScale(30),
+      paddingHorizontal: isLandscape? moderateScale(10) : moderateScale(20),
       borderWidth:moderateScale(2),
       borderColor: 'white',
   },
     providerButton: {
       padding: isLandscape? moderateScale(5) : moderateScale(10),
-      paddingLeft: isLandscape? moderateScale(10) : moderateScale(20),
-      paddingRight: isLandscape? moderateScale(10) : moderateScale(20),
+      paddingHorizontal: isLandscape? moderateScale(10) : moderateScale(20),
+      borderWidth: moderateScale(1),
+      borderColor: 'white',
       backgroundColor: 'grey',
       alignItems: 'center',
       gap: 6
   },
-    view: {
-      padding: moderateScale(20),
-      margin: moderateScale(10),
-      gap: isLandscape ? moderateScale(25) : moderateScale(35),
-      justifyContent: 'center',
-      alignItems: 'center',
-    }
+    backButton:{
+      paddingHorizontal: isLandscape? moderateScale(5) : moderateScale(10),
+      borderRadius: moderateScale(30),
+      flexDirection: 'row',
+      gap: 4
+  },
   });
 
   return (
@@ -100,29 +109,35 @@ export default function LoginPage() {
               style={StyleSheet.absoluteFillObject}
           />
           {showProviders ? (
-            <View style={styles.view}>
-              <TouchableOpacity onPress={() => handleLogin('github')}
-              style={styles.providerButton}
-              >
-                <Text style={styles.textLoginButton}>Login with Github
-                </Text>
-                <AntDesign name="github" size={isLandscape? moderateScale(16) : moderateScale(14)} color="white" />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => handleLogin('google')}
-              style={styles.providerButton}
-              >
-                <Text style={styles.textLoginButton}>Login with Google</Text>
-                <AntDesign name="google" size={isLandscape? moderateScale(16) : moderateScale(14)} color="white" />
-              </TouchableOpacity>
+            <View style={styles.container}>
+              <View style={styles.viewHeader}>
+                <TouchableOpacity onPress={() => setShowProviders(false)} style={styles.backButton}>
+                  <Text style={styles.textLoginButton}>Get Back</Text>
+                  <AntDesign name="rollback" size={isLandscape? moderateScale(16) : moderateScale(14)} color="white" />
+                </TouchableOpacity>
+              </View>
+              <View style={styles.viewMainContent}>
+                <TouchableOpacity onPress={() => handleLogin('github')} style={styles.providerButton}>
+                  <Text style={styles.textLoginButton}>Login with Github
+                  </Text>
+                  <AntDesign name="github" size={isLandscape? moderateScale(16) : moderateScale(14)} color="white" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => handleLogin('google')} style={styles.providerButton}>
+                  <Text style={styles.textLoginButton}>Login with Google</Text>
+                  <AntDesign name="google" size={isLandscape? moderateScale(16) : moderateScale(14)} color="white" />
+                </TouchableOpacity>
+              </View>
             </View>
           ) : (
-          <View style={styles.view}>
+          <View style={styles.container}>
+            <View style={styles.viewMainContent}>
               <Text style={styles.welcomeSentence}>Welcome to your Diary</Text>
               <TouchableOpacity onPress={() => setShowProviders(true)}
               style={styles.loginButton}
               >
                   <Text style={styles.textLoginButton}>Login</Text>
               </TouchableOpacity>
+            </View>
           </View>
           )}
       </SafeAreaView>
