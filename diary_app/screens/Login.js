@@ -51,8 +51,8 @@ export default function LoginPage() {
   const { height, width, moderateScale } = useResponsiveContext();
   const isLandscape = width > height
 
-  const { session } = useSupabaseSession();
-  console.log("Session dans Login = ", session);
+  // const { session, user } = useSupabaseSession();
+  // console.log("Session dans Login = ", session);
 
   const styles = StyleSheet.create({
     container: {

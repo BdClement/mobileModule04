@@ -29,6 +29,14 @@ const styles = StyleSheet.create({
 });
 
 //  A faire :
-  // Creation de database sur Supabase et utilisation de cette DB sur mon Home
-  // Amelioration de ma page Home
+        // Header avec photo / Nom (DAY 5) DONE
+        // Bouton pour voir le calendrier avec les notes pour chaque jour ? (Day 5)
+        // Liste avec les entees (Toutes pour l'instant ! -> 2 dernières pour le Day 5) 
+        // possibilité de clique sur l'entree et d'etre dirigé vers une page de presentation de l'entree
+        // Bouton pour creer une entree DONE
+        // Bouton pour supprimer une entree
+        // Logout Button (Day 5) DONE
+        // total number of entries display (Day 5)
+        // List les % de feeling (Day 5)
+  // Creation de database sur Supabase et utilisation de cette DB sur mon Home DONE
   // tester en mode web + autre pour avoir les responsivites

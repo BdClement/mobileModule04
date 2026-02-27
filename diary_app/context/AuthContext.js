@@ -28,11 +28,11 @@ export const SessionProvider = ({ children }) => {
     console.log("useEffect monté !");
     const initSession = async () => {
       console.log("initSession called !");
-      const { data: { session }, error } = await supabase.auth.getSession();
+      const { data, error } = await supabase.auth.getSession();
       if (error) console.log("Erreur getting session :", error);
       else {
-        console.log("Session récupéréee : ", session);
-        setSession(session);
+        console.log("Session récupéréee : ", data?.session ?? null);
+        setSession(data?.session ?? null);
       };
     };
 
@@ -81,7 +81,9 @@ export const SessionProvider = ({ children }) => {
     }
   }, []);
 
-  return <SessionContext.Provider value={{session}}>
+  const user = session?.user ?? null;
+
+  return <SessionContext.Provider value={{session, user}}>
     {children}
   </SessionContext.Provider>;
 }

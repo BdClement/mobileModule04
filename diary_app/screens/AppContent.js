@@ -1,9 +1,9 @@
 import { useSupabaseSession } from '../context/AuthContext';
 import LoginPage from './Login';
-import HomePage from './Home';
+import Home from '../navigation/Home';
 
 export default function AppContent() {
   const { session } = useSupabaseSession();
 
-  return session ? <HomePage /> : <LoginPage />;
+  return session ? <Home /> : <LoginPage />;
 }
