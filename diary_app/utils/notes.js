@@ -1,9 +1,9 @@
 export const FEELINGS = {
-  "Very sad": "😢",
-  "Sad": "😔",
-  "Neutral": "😐",
-  "Happy": "🙂",
-  "Very happy": "😄",
+  "Very sad": "sad-tear",
+  "Sad": "sad-cry",
+  "Neutral": "meh",
+  "Happy": "smile",
+  "Very happy": "grin-beam",
 };
 
 export const FEELINGS_OPTIONS = Object.keys(FEELINGS);

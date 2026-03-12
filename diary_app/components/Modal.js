@@ -16,7 +16,7 @@ export default function ModalToFill({ visible, onClose, children }) {
       },
       modalContent: {
         width: isLandscape? '75%' : '90%',
-        backgroundColor: '#346925',
+        backgroundColor: "#0e6f03c5",
         borderRadius: moderateScale(15),
         paddingHorizontal: moderateScale(20),
         paddingVertical: moderateScale(12),

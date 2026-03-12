@@ -50,7 +50,7 @@ export default function NoteCreationForm({ userId, onClose }) {
   
     const styles = StyleSheet.create({
       container: {
-        marginVertical: moderateScale(6)
+        marginVertical: moderateScale(6),
       },
       title: {
         textAlign: 'center',

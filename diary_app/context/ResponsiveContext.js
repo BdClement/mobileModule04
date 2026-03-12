@@ -8,10 +8,6 @@ export function ResponsiveProvider({ children }) {
 
   // Cela permet de créer un objet stable qui ne change que si les dimensions changent
   // Sans ça responsive est modifier a chaque fois, cela re-render donc les composants et ma navigation repart a son state initial
-  // const value = React.useMemo(
-  //   () => responsive,
-  //   [responsive.width, responsive.height]
-  // );
 
   return (
     <ResponsiveContext.Provider value={responsive}>
